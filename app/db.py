@@ -25,6 +25,7 @@ class Post(Base):
     file_type = Column(String,nullable = False)
     file_name = Column(String,nullable = False)
     created_at = Column(DateTime,default = datetime.utcnow)
+    
 '''
 engine is the database connection manager.
 
@@ -35,6 +36,7 @@ Opens/reuses connections (pooling for most DBs; for SQLite it still manages acce
 Executes low-level DB operations and is used by sessions.
 So AsyncSession works on top of engine, and without engine your app cannot talk to the database.'''
 
+# Engine = road between FastAPI and Database
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(engine,expire_on_commit = False)
