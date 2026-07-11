@@ -14,9 +14,20 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="PixShare API",
+    description="""
+A cloud-based social media backend built with FastAPI, MongoDB Atlas and ImageKit.
+
+Features:
+- JWT Authentication
+- Image Upload
+- User Profiles
+- Post Management
+- RESTful API
+""",
     version="1.0.0",
     lifespan=lifespan,
 )
+
 from app.routers.auth import router as auth_router
 from app.routers.posts import router as post_router
 

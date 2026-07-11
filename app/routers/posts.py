@@ -34,16 +34,40 @@ async def create_post(
 
 
     return post
-@router.get("/")
-async def get_posts():
+from fastapi import Query
 
-    posts = await (
-        Post.find_all()
+@router.get("/")
+async def get_posts(
+    page: int = Query(1, ge=1),
+    limit: int = Query(10, ge=1, le=50)
+):
+
+    skip = (page - 1) * limit
+
+    posts = (
+        await Post.find_all()
         .sort("-created_at")
+        .skip(skip)
+        .limit(limit)
         .to_list()
     )
 
-    return posts
+    feed = []
+
+    for post in posts:
+
+        user = await User.get(post.user_id)
+
+        feed.append({
+            "id": str(post.id),
+            "caption": post.caption,
+            "image_url": post.image_url,
+            "created_at": post.created_at,
+            "username": user.username if user else "Unknown",
+            "profile_picture": user.profile_picture if user else None
+        })
+
+    return feed
 
 @router.delete("/{post_id}")
 async def delete_post(
@@ -62,5 +86,28 @@ async def delete_post(
     await post.delete()
 
     return {
-        "message": "Post deleted"
+    "success": True,
+    "message": "Post deleted successfully"
+}
+
+@router.get("/{post_id}")
+async def get_post(post_id: str):
+
+    post = await Post.get(post_id)
+
+    if not post:
+        raise HTTPException(
+            status_code=404,
+            detail="Post not found"
+        )
+
+    user = await User.get(post.user_id)
+
+    return {
+        "id": str(post.id),
+        "caption": post.caption,
+        "image_url": post.image_url,
+        "created_at": post.created_at,
+        "username": user.username if user else "Unknown",
+        "profile_picture": user.profile_picture if user else None
     }
