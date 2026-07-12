@@ -45,10 +45,18 @@ export default function LoginPage() {
 
   const handleSubmit = form.handleSubmit(async (values) => {
     try {
-      setSubmitting(true);
       const response = await loginUser(values);
+
+      console.log("LOGIN RESPONSE");
+      console.log(response);
+
       login(response.access_token);
-      toast.success("Welcome back to PixShare.");
+
+      console.log("TOKEN SAVED");
+      console.log(localStorage.getItem("pixshare.token"));
+
+      toast.success("Welcome back");
+
       navigate("/feed", { replace: true });
     } catch (error) {
       toast.error(getErrorMessage(error));
