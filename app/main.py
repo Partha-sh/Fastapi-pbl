@@ -30,10 +30,7 @@ Features:
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://fastapi-i3twi4cyn-partha-shs-projects.vercel.app",  # replace if your Vercel URL is different
-    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
