@@ -29,10 +29,10 @@ Features:
 )
 
 
+from fastapi.middleware.cors import CORSMiddleware
+
 origins = [
-    "http://localhost:5173",
-    "https://fastapi-i3twi4cyn-partha-shs-projects.vercel.app",
-    "https://fastapi-pbl.vercel.app",
+    "https://fastapi-12yl9chii-partha-shs-projects.vercel.app",
 ]
 
 app.add_middleware(
