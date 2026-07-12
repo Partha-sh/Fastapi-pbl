@@ -1,15 +1,19 @@
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
-from app.routers.users import router as user_router
-from app.database import init_db
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.database import init_db
+from app.routers.auth import router as auth_router
+from app.routers.posts import router as post_router
+from app.routers.users import router as user_router
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_db()
     print("MongoDB Connected Successfully 🚀")
     yield
-
 
 
 app = FastAPI(
@@ -29,26 +33,19 @@ Features:
 )
 
 
-from fastapi.middleware.cors import CORSMiddleware
-
-origins = [
-    "https://fastapi-12yl9chii-partha-shs-projects.vercel.app",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-from app.routers.auth import router as auth_router
-from app.routers.posts import router as post_router
 
 app.include_router(auth_router)
 app.include_router(post_router)
 app.include_router(user_router)
+
 
 @app.get("/")
 async def root():
