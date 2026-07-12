@@ -28,9 +28,16 @@ Features:
     lifespan=lifespan,
 )
 
+
+origins = [
+    "http://localhost:5173",
+    "https://fastapi-i3twi4cyn-partha-shs-projects.vercel.app",
+    "https://fastapi-pbl.vercel.app",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"https://.*\.vercel\.app",
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
