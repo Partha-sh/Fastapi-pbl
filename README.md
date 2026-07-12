@@ -1,126 +1,302 @@
-# PixShare Frontend
+# PixShare - Cloud-Based Social Media Platform
 
-This repo now includes a complete React frontend for the existing PixShare FastAPI backend without changing any backend routes, files, or folder structure.
+PixShare is a modern cloud-native social media application built using **FastAPI**, **MongoDB Atlas**, **React**, **TypeScript**, and **ImageKit**. The project demonstrates authentication, cloud image storage, RESTful API design, secure JWT authorization, and modern frontend development.
 
-## Stack
+Unlike a traditional CRUD application, PixShare focuses on building a production-style backend with scalable architecture and cloud integration.
 
-- React 19
-- Vite
+---
+
+## Features
+
+- Secure JWT Authentication
+- User Registration & Login
+- Create Image Posts
+- Cloud Image Upload using ImageKit
+- Public Feed
+- User Profiles
+- Edit Profile
+- Delete Own Posts
+- Protected Routes
+- Responsive Modern UI
+- REST API Architecture
+- MongoDB Atlas Integration
+- Cloud Deployment
+
+---
+
+## Tech Stack
+
+### Backend
+
+- FastAPI
+- Python
+- Beanie ODM
+- MongoDB Atlas
+- JWT Authentication
+- Passlib
+- Python-JOSE
+- ImageKit SDK
+- Uvicorn
+
+### Frontend
+
+- React
 - TypeScript
-- Tailwind CSS
-- shadcn-style UI components
-- React Router v7
-- TanStack Query
+- Vite
+- React Router
+- React Query
 - Axios
-- React Hook Form
-- Zod
+- Tailwind CSS
+- Shadcn UI
 - Framer Motion
-- Lucide React
-- Sonner toasts
 
-## What the frontend uses
+### Cloud Services
 
-Only these existing backend endpoints are consumed:
+- MongoDB Atlas
+- ImageKit
+- Render (Backend)
+- Vercel (Frontend)
 
-- `POST /auth/register`
-- `POST /auth/login`
-- `GET /auth/me`
-- `GET /users/me`
-- `PUT /users/me`
-- `GET /users/{username}`
-- `POST /posts`
-- `GET /posts`
-- `GET /posts/{id}`
-- `DELETE /posts/{id}`
+---
 
-## Notes about backend-aware behavior
+## Project Architecture
 
-- The backend does not currently expose CORS middleware, so the Vite dev server proxies API requests to the backend.
-- Login uses the backend's OAuth form contract, which expects the email to be sent as the `username` field.
-- Profile photo updates use a hosted image URL because the backend does not expose a dedicated profile image upload endpoint.
-- The profile page builds a user's post list by reading the paginated feed endpoint, since there is no user-specific posts route.
-- No mock data or invented endpoints are used anywhere in the UI.
+```
+                React Frontend
+                      │
+                      │
+                 Axios API Calls
+                      │
+                      ▼
+              FastAPI REST Backend
+        ┌─────────────┼─────────────┐
+        │             │             │
+        ▼             ▼             ▼
+ JWT Authentication MongoDB Atlas ImageKit Cloud
+```
 
-## Frontend setup
+---
 
-1. Install frontend dependencies:
+## Authentication Flow
+
+```
+User Login
+     │
+     ▼
+FastAPI verifies credentials
+     │
+     ▼
+Generate JWT Token
+     │
+     ▼
+Store Token in Local Storage
+     │
+     ▼
+Axios attaches Authorization Header
+     │
+     ▼
+Protected API Access
+```
+
+---
+
+## Folder Structure
+
+```
+PixShare
+│
+├── app
+│   ├── routers
+│   ├── services
+│   ├── auth.py
+│   ├── database.py
+│   ├── dependencies.py
+│   ├── models.py
+│   └── main.py
+│
+├── src
+│   ├── api
+│   ├── components
+│   ├── hooks
+│   ├── layouts
+│   ├── pages
+│   ├── routes
+│   ├── services
+│   ├── types
+│   └── utils
+│
+├── package.json
+├── pyproject.toml
+└── README.md
+```
+
+---
+
+## API Endpoints
+
+### Authentication
+
+| Method | Endpoint |
+|----------|----------------|
+| POST | /auth/register |
+| POST | /auth/login |
+| GET | /auth/me |
+
+### Users
+
+| Method | Endpoint |
+|----------|----------------|
+| GET | /users/me |
+| PUT | /users/me |
+
+### Posts
+
+| Method | Endpoint |
+|----------|----------------|
+| GET | /posts |
+| POST | /posts |
+| DELETE | /posts/{id} |
+
+---
+
+## Installation
+
+### Clone Repository
+
+```bash
+git clone https://github.com/Partha-sh/Fastapi-pbl.git
+
+cd Fastapi-pbl
+```
+
+---
+
+### Backend Setup
+
+```bash
+python -m venv .venv
+
+source .venv/bin/activate
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Run backend
+
+```bash
+uvicorn app.main:app --reload
+```
+
+---
+
+### Frontend Setup
 
 ```bash
 npm install
-```
 
-2. Add a frontend env value if you want to override the default backend URL:
-
-```bash
-cp .env.example .env
-```
-
-Set:
-
-```bash
-VITE_BACKEND_URL=http://127.0.0.1:8000
-```
-
-If you already use a root `.env` for FastAPI, just add the `VITE_BACKEND_URL` line to that existing file instead of replacing anything.
-
-3. Start the frontend:
-
-```bash
 npm run dev
 ```
 
-The Vite app runs at `http://127.0.0.1:5173/` by default.
+---
 
-## Backend run reminder
+## Environment Variables
 
-The frontend assumes your FastAPI API is already running locally. One common local command is:
+### Backend (.env)
 
-```bash
-uv run uvicorn app.main:app --reload
+```env
+MONGODB_URI=
+
+DATABASE_NAME=
+
+SECRET_KEY=
+
+IMAGEKIT_PUBLIC_KEY=
+
+IMAGEKIT_PRIVATE_KEY=
+
+IMAGEKIT_URL_ENDPOINT=
 ```
 
-If you use a different command in your environment, keep using that.
+---
 
-## Production build
+### Frontend (.env)
 
-```bash
-npm run build
+```env
+VITE_BACKEND_URL=
 ```
 
-## Frontend structure
+---
 
-```text
-src/
-  api/
-  assets/
-  components/
-    common/
-    layout/
-    post/
-    profile/
-    ui/
-  hooks/
-  layouts/
-  pages/
-    Login/
-    Register/
-    Feed/
-    CreatePost/
-    Profile/
-    EditProfile/
-    NotFound/
-  routes/
-  services/
-  types/
-  utils/
-```
+## Security
 
-## Delivered pages
+- Password hashing using Passlib
+- JWT based Authentication
+- Protected API Routes
+- Authorization Middleware
+- Cloud Image Storage
+- Secure Environment Variables
+- CORS Configuration
 
-- Login
-- Register
-- Feed
-- Create Post
-- Profile
-- Edit Profile
-- 404
+---
+
+## Deployment
+
+Frontend
+
+- Vercel
+
+Backend
+
+- Render
+
+Database
+
+- MongoDB Atlas
+
+Image Storage
+
+- ImageKit
+
+---
+
+## Future Improvements
+
+- Search Users
+- Like System
+- Comments
+- Follow / Unfollow Users
+- Notifications
+- Infinite Scrolling
+- Real-Time Chat
+- WebSockets
+- Docker
+- GitHub Actions CI/CD
+- Redis Caching
+
+---
+
+## Learning Outcomes
+
+This project provided hands-on experience with building and deploying a cloud-native full-stack application. Throughout the development process, concepts such as REST API design, JWT authentication, dependency injection, MongoDB integration using Beanie ODM, cloud image storage with ImageKit, React Query for server state management, protected routing, deployment on Render and Vercel, environment configuration, CORS handling, and production debugging were explored. The project also strengthened practical understanding of scalable backend architecture and real-world deployment workflows.
+
+---
+
+## Screenshots
+
+_Add screenshots of Login, Feed, Profile, Create Post, and Swagger UI here._
+
+---
+
+## Author
+
+**Partha Sharma**
+
+B.Tech Computer Science Engineering
+
+Backend Developer | Machine Learning Enthusiast
+
+GitHub: https://github.com/Partha-sh
