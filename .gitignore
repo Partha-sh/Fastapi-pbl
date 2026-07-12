@@ -9,5 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# Node-generated files
+node_modules/
+npm-debug.log*
+
 # Local environment variables
 .env

@@ -1,21 +1,34 @@
-# here we have to write the fields thats are essential to write a post
-from fastapi_users import schemas
-from pydantic import BaseModel
-import uuid
+from pydantic import BaseModel, EmailStr
 
-class PostCreate(BaseModel):
-    title: str
-    content: str
+
+class UserRegister(BaseModel):
+    username: str
+    email: EmailStr
+    password: str
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class UserResponse(BaseModel):
+    id: str
+    username: str
+    email: EmailStr
 
 class PostResponse(BaseModel):
-    title: str
-    content: str
+    id: str
+    caption: str
+    image_url: str
 
-class UserRead(schemas.BaseUser[uuid.UUID]):
-    pass
+class UpdateProfile(BaseModel):
+    username: str | None = None
+    profile_picture: str | None = None
 
-class UserCreate(schemas.BaseUserCreate):
-    pass
-
-class UserUpdate(schemas.BaseUserUpdate):
-    pass
+    
